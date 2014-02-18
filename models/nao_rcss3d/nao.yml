@@ -1,0 +1,453 @@
+# NAO RoboCup Soccer Simulation 3D (RCSS3D) Robot Model
+# Author: Justin Stoecker
+
+---
+name: Nao RCSS3D
+
+meshDir     : meshes
+materialDir : meshes
+textureDir  : meshes
+
+# Coordinate system
+forward      : [0, 1, 0]
+right        : [-1, 0, 0]
+up           : [0, 0, 1]
+
+chains:
+  - !chain &torso_chain
+    name  : Torso
+    parts :
+      - &torso !mesh
+        name        : Torso
+        parent      :
+        offset      : [0, 0, 0.385]
+        file        : naobody.obj
+        translation : [0, 0.02, 0]
+        rotation    : [90, 180, 0]
+        scale       : [1, 1, 1]
+        mass        : 1.2171
+
+  - !chain &head_chain
+    name  : Head
+    parts :
+      - &neck_yaw !revolute
+        name        : Neck Yaw
+        parent      : *torso
+        offset      : [0, 0, 0.09]
+        axis        : [0, 0, 1]
+        minValue    : -120
+        maxValue    : 120
+
+      - &neck !cylinder
+        name        : Neck
+        parent      : *neck_yaw
+        offset      : [0, 0, 0]
+        axis        : [0, 0, 1]
+        length      : 0.08
+        radius      : 0.015
+        mass        : 0.05
+
+      - &neck_pitch !revolute
+        name        : Neck Pitch
+        parent      : *neck
+        offset      : [0, 0, 0.06]
+        axis        : [1, 0, 0]
+        minValue    : -45
+        maxValue    : 45
+
+      - &head !mesh
+        name        : Head
+        parent      : *neck_pitch
+        offset      : [0, 0, 0.005]
+        file        : naohead.obj
+        translation : [0, 0.02, 0]
+        rotation    : [0, 0, 180]
+        scale       : [1, 1, 1]
+        mass        : 0.35
+
+  - !chain &l_arm_chain
+    name  : Left Arm
+    parts :
+      - &l_shoulder_pitch !revolute
+        name        : Left Shoulder Pitch
+        parent      : *torso
+        offset      : [-0.098, 0, 0.075] 
+        axis        : [1, 0, 0] 
+        minValue    : -120 
+        maxValue    : 120
+
+      - &l_shoulder !sphere
+        name        : Left Shoulder
+        parent      : *l_shoulder_pitch
+        offset      : [0, 0, 0] 
+        radius      : 0.01
+        mass        : 0.07
+
+      - &l_shoulder_yaw !revolute
+        name        : Left Shoulder Yaw
+        parent      : *l_shoulder
+        offset      : [0, 0, 0]
+        axis        : [0, 0, 1]
+        minValue    : -1
+        maxValue    : 95
+
+      - &l_upper_arm !mesh
+        name        : Left Upper Arm
+        parent      : *l_shoulder_yaw
+        offset      : [-0.01, 0.02, 0]
+        file        : lupperarm.obj
+        translation : [0.02, 0.02, 0]
+        rotation    : [0, 90, 0]
+        scale       : [1, 1, 1]
+        mass        : 0.15
+
+      - &l_arm_roll !revolute
+        name        : Left Arm Roll
+        parent      : *l_upper_arm
+        offset      : [0.01, 0.07, 0.009]
+        axis        : [0, 1, 0]
+        minValue    : -120
+        maxValue    : 120
+
+      - &l_elbow !sphere
+        name        : Left Elbow
+        parent      : *l_arm_roll
+        offset      : [0, 0, 0] 
+        radius      : 0.01
+        mass        : 0.035
+
+      - &l_arm_yaw !revolute
+        name        : Left Arm Yaw
+        parent      : *l_elbow
+        offset      : [0, 0, 0]
+        axis        : [0, 0, 1]
+        minValue    : -90
+        maxValue    : 1
+
+      - &l_lower_arm !mesh
+        name        : Left Lower Arm
+        parent      : *l_arm_yaw
+        offset      : [0, 0.05, 0]
+        file        : llowerarm.obj
+        translation : [0.01, 0, 0]
+        rotation    : [0, 0, 180]
+        scale       : [1, 1, 1]
+        mass        : 0.2
+
+  - !chain &r_arm_chain
+    name  : Right Arm
+    parts :
+      - &r_shoulder_pitch !revolute
+        name        : Right Shoulder Pitch
+        parent      : *torso
+        offset      : [0.098, 0, 0.075] 
+        axis        : [1, 0, 0] 
+        minValue    : -120 
+        maxValue    : 120
+
+      - &r_shoulder !sphere
+        name        : Right Shoulder
+        parent      : *r_shoulder_pitch
+        offset      : [0, 0, 0] 
+        radius      : 0.01
+        mass        : 0.07
+
+      - &r_shoulder_yaw !revolute
+        name        : Right Shoulder Yaw
+        parent      : *r_shoulder
+        offset      : [0, 0, 0]
+        axis        : [0, 0, 1]
+        minValue    : -95
+        maxValue    : 1
+
+      - &r_upper_arm !mesh
+        name        : Right Upper Arm
+        parent      : *r_shoulder_yaw
+        offset      : [0.01, 0.02, 0]
+        file        : rupperarm.obj
+        translation : [-0.02, 0.02, 0]
+        rotation    : [0, 90, 0]
+        scale       : [1, 1, 1]
+        mass        : 0.15
+
+      - &r_arm_roll !revolute
+        name        : Right Arm Roll
+        parent      : *r_upper_arm
+        offset      : [-0.01, 0.07, 0.009]
+        axis        : [0, 1, 0]
+        minValue    : -120
+        maxValue    : 120
+
+      - &r_elbow !sphere
+        name        : Right Elbow
+        parent      : *r_arm_roll
+        offset      : [0, 0, 0] 
+        radius      : 0.01
+        mass        : 0.035
+
+      - &r_arm_yaw !revolute
+        name        : Right Arm Yaw
+        parent      : *r_elbow
+        offset      : [0, 0, 0]
+        axis        : [0, 0, 1]
+        minValue    : -1
+        maxValue    : 90
+
+      - &r_lower_arm !mesh
+        name        : Right Lower Arm
+        parent      : *r_arm_yaw
+        offset      : [0, 0.05, 0]
+        file        : rlowerarm.obj
+        translation : [-0.01, 0, 0]
+        rotation    : [180, 0, 0]
+        scale       : [1, 1, 1]
+        mass        : 0.2
+
+  - !chain &l_leg_chain
+    name  : Left Leg
+    parts :
+      - &l_hip_yawpitch !revolute
+        name        : Left Hip Yaw/Pitch
+        parent      : *torso
+        offset      : [-0.055, -0.01, -0.115]
+        axis        : [-0.7071, 0, -0.7071] 
+        minValue    : -90
+        maxValue    : 1
+
+      - &l_hip1 !sphere
+        name        : Left Hip 1
+        parent      : *l_hip_yawpitch
+        offset      : [0, 0, 0]
+        radius      : 0.01
+        mass        : 0.09
+
+      - &l_hip_roll !revolute
+        name        : Left Hip Roll
+        parent      : *l_hip1
+        offset      : [0, 0, 0]
+        axis        : [0, 1, 0]
+        minValue    : -25
+        maxValue    : 45
+
+      - &l_hip2 !sphere
+        name        : Left Hip 2
+        parent      : *l_hip_roll
+        offset      : [0, 0, 0]
+        radius      : 0.01
+        mass        : 0.125
+
+      - &l_hip_pitch !revolute
+        name        : Left Hip Pitch
+        parent      : *l_hip2
+        offset      : [0, 0, 0]
+        axis        : [1, 0, 0]
+        minValue    : -25
+        maxValue    : 100
+
+      - &l_thigh !mesh
+        name        : Left Thigh 
+        parent      : *l_hip_pitch
+        offset      : [0, 0.01, -0.04]
+        file        : lthigh.obj
+        translation : [0, 0, -0.02]
+        rotation    : [90, 180, 0]
+        scale       : [1, 1, 1]
+        mass        : 0.275
+
+      - &l_knee_pitch !revolute
+        name        : Left Knee Pitch
+        parent      : *l_thigh
+        offset      : [0, -0.005, -0.08]
+        axis        : [1, 0, 0]
+        minValue    : -130
+        maxValue    : 1
+
+      - &l_shank !mesh
+        name        : Left Shank
+        parent      : *l_knee_pitch
+        offset      : [0, 0.01, -0.045]
+        file        : lshank.obj
+        translation : [0, 0, -0.02]
+        rotation    : [90, 0, 180]
+        scale       : [1, 1, 1]
+        mass        : 0.225
+
+      - &l_foot_pitch !revolute
+        name        : Left Foot Pitch
+        parent      : *l_shank
+        offset      : [0, -0.01, -0.055]
+        axis        : [1, 0, 0]
+        minValue    : -45
+        maxValue    : 75
+
+      - &l_ankle !sphere
+        name        : Left Ankle
+        parent      : *l_foot_pitch
+        offset      : [0, 0, 0]
+        radius      : 0.01
+        mass        : 0.125
+
+      - &l_foot_roll !revolute
+        name        : Left Foot Roll
+        parent      : *l_ankle
+        offset      : [0, 0, 0]
+        axis        : [0, 1, 0]
+        minValue    : -45
+        maxValue    : 25
+
+      - &l_foot !mesh
+        name        : Left Foot
+        parent      : *l_foot_roll
+        offset      : [0, 0.03, -0.035]
+        file        : lfoot.obj
+        translation : [0, 0, 0.04]
+        rotation    : [90, 180, 0]
+        scale       : [1, 1, 1]
+        mass        : 0.2
+
+
+  - !chain &r_leg_chain
+    name  : Right Leg
+    parts :
+      - &r_hip_yawpitch !revolute
+        name        : Right Hip Yaw/Pitch
+        parent      : *torso
+        offset      : [0.055, -0.01, -0.115]
+        axis        : [-0.7071, 0, 0.7071] 
+        minValue    : -90
+        maxValue    : 1
+
+      - &r_hip1 !sphere
+        name        : Right Hip 1
+        parent      : *r_hip_yawpitch
+        offset      : [0, 0, 0]
+        radius      : 0.01
+        mass        : 0.09
+
+      - &r_hip_roll !revolute
+        name        : Right Hip Roll
+        parent      : *r_hip1
+        offset      : [0, 0, 0]
+        axis        : [0, 1, 0]
+        minValue    : -45
+        maxValue    : 25
+
+      - &r_hip2 !sphere
+        name        : Right Hip 2
+        parent      : *r_hip_roll
+        offset      : [0, 0, 0]
+        radius      : 0.01
+        mass        : 0.125
+
+      - &r_hip_pitch !revolute
+        name        : Right Hip Pitch
+        parent      : *r_hip2
+        offset      : [0, 0, 0]
+        axis        : [1, 0, 0]
+        minValue    : -25
+        maxValue    : 100
+
+      - &r_thigh !mesh
+        name        : Right Thigh 
+        parent      : *r_hip_pitch
+        offset      : [0, 0.01, -0.04]
+        file        : rthigh.obj
+        translation : [0, 0, -0.02]
+        rotation    : [90, 180, 0]
+        scale       : [1, 1, 1]
+        mass        : 0.275
+
+      - &r_knee_pitch !revolute
+        name        : Right Knee Pitch
+        parent      : *r_thigh
+        offset      : [0, -0.005, -0.08]
+        axis        : [1, 0, 0]
+        minValue    : -130
+        maxValue    : 1
+
+      - &r_shank !mesh
+        name        : Right Shank
+        parent      : *r_knee_pitch
+        offset      : [0, 0.01, -0.045]
+        file        : rshank.obj
+        translation : [0, 0, -0.02]
+        rotation    : [90, 0, 180]
+        scale       : [1, 1, 1]
+        mass        : 0.225
+
+      - &r_foot_pitch !revolute
+        name        : Right Foot Pitch
+        parent      : *r_shank
+        offset      : [0, -0.01, -0.055]
+        axis        : [1, 0, 0]
+        minValue    : -45
+        maxValue    : 75
+
+      - &r_ankle !sphere
+        name        : Right Ankle
+        parent      : *r_foot_pitch
+        offset      : [0, 0, 0]
+        radius      : 0.01
+        mass        : 0.125
+
+      - &r_foot_roll !revolute
+        name        : Right Foot Roll
+        parent      : *r_ankle
+        offset      : [0, 0, 0]
+        axis        : [0, 1, 0]
+        minValue    : -25
+        maxValue    : 45
+
+      - &r_foot !mesh
+        name        : Right Foot
+        parent      : *r_foot_roll
+        offset      : [0, 0.03, -0.035]
+        file        : rfoot.obj
+        translation : [0, 0, 0.04]
+        rotation    : [90, 180, 0]
+        scale       : [1, 1, 1]
+        mass        : 0.2
+
+
+poses:
+  - name   : Stand Pose
+    values : 
+      {
+        *neck_yaw         :   0,
+        *neck_pitch       :  10,
+        *l_shoulder_pitch : -90,
+        *l_shoulder_yaw   :  10,
+        *l_arm_roll       : -70,
+        *l_arm_yaw        : -30,
+        *r_shoulder_pitch : -90,
+        *r_shoulder_yaw   : -10,
+        *r_arm_roll       : 70,
+        *r_arm_yaw        : 30,
+        *l_hip_yawpitch   : -10,
+        *l_hip_roll       : 5,
+        *l_hip_pitch      : -10,
+        *l_knee_pitch     : -5,
+        *l_foot_pitch     : 4,
+        *l_foot_roll      : -5,
+        *r_hip_yawpitch   : -10,
+        *r_hip_roll       : -5,
+        *r_hip_pitch      : -10,
+        *r_knee_pitch     : -5,
+        *r_foot_pitch     : 4,
+        *r_foot_roll      : 5,
+      }
+
+skelMapper: edu.miami.cs.krobot.mapping.Nao3DMapper
+
+status:
+  elements:
+    [
+      *head_chain,
+      *l_arm_chain,
+      *r_arm_chain,
+      *l_leg_chain,
+      *r_leg_chain,
+      orientation_up,
+      orientation_fwd
+    ]
+  radians: false

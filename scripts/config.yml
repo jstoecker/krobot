@@ -1,0 +1,19 @@
+---
+
+# Default host for transmitting UDP packets with the robot model output values
+sendAddress       : localhost
+sendPort          : 32771
+
+# If filterSkeleton is true, the joint positions retrieved from OpenNI will be
+# filtered using an IIR filter with the coefficient arrays B and A
+filterSkeleton    : true
+filterCoeffB      : [0.0675, 0.1349, 0.0675 ]
+filterCoeffA      : [1.0000, -1.1430, 0.4128]
+
+# Multisample anti-aliasing for enhanced edge appearance in OpenGL views
+msaaEnabled       : true
+msaaSamples       : 8
+
+# Shadow mapping
+shadows           : true
+shadowSize        : 1024

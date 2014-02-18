@@ -1,0 +1,490 @@
+# NAO version 4.0 (H21) Robot Model
+# Author: Justin Stoecker
+
+---
+# =============================================================================
+# GENERAL PROPERTIES
+# =============================================================================
+
+name: NAO v4 H21
+
+# Directories relative to the location of this yml file
+meshDir      : meshes
+materialDir  : meshes
+textureDir   : meshes
+
+# Meshes are in millimeters; kRobot is in meters
+scale        : 0.001
+
+# Coordinate system of the robot
+forward      : [1, 0, 0]
+right        : [0, -1, 0]
+up           : [0, 0, 1]
+
+# =============================================================================
+# KINEMATIC CHAINS
+# =============================================================================
+
+chains:
+
+  - !chain
+    name  : Torso
+    parts :
+      - !mesh &torso
+        name   : Torso
+        parent :
+        offset : [0,0,0.33309]
+        file   : Torso.obj
+        mass   : 1.04956
+
+  - !chain &head_chain
+    name  : Head
+    parts :
+      - !revolute &head_yaw
+        name        : HeadYaw
+        parent      : *torso
+        offset      : [0, 0, 0.1265]
+        axis        : [0, 0, 1]
+        minValue    : -119.5
+        maxValue    : 119.5
+
+      - !mesh &neck
+        name        : Neck
+        parent      : *head_yaw
+        file        : HeadYaw.obj
+        mass        : 0.06442
+
+      - !revolute &head_pitch
+        name        : HeadPitch
+        parent      : *neck
+        axis        : [0, 1, 0]
+        minValue    : -38.5
+        maxValue    : 29.5
+
+      - !mesh &head
+        name        : Head
+        parent      : *head_pitch
+        file        : HeadPitch.obj
+        mass        : 0.60533
+
+  - !chain &l_arm_chain
+    name  : Left Arm
+    parts :
+      - &l_shoulder_pitch !revolute
+        name        : LShoulderPitch
+        parent      : *torso
+        offset      : [0, 0.098, 0.1] 
+        axis        : [0, 1, 0] 
+        minValue    : -119.5
+        maxValue    : 119.5
+    
+      - &l_shoulder !mesh
+        name        : Left Shoulder
+        parent      : *l_shoulder_pitch
+        file        : LShoulderPitch.obj
+        mass        : 0.07504
+    
+      - &l_shoulder_roll !revolute
+        name        : LShoulderRoll
+        parent      : *l_shoulder
+        offset      : [0, 0, 0]
+        axis        : [0, 0, 1]
+        minValue    : -18
+        maxValue    : 76
+    
+      - &l_bicep !mesh
+        name        : Left Bicep
+        parent      : *l_shoulder_roll
+        file        : LShoulderRoll.obj
+        mass        : 0.15777
+    
+      - &l_elbow_yaw !revolute  
+        name        : LElbowYaw
+        parent      : *l_bicep
+        offset      : [0.105, 0.015, 0]
+        axis        : [1, 0, 0]
+        minValue    : -119.5
+        maxValue    : 119.5
+    
+      - &l_elbow !mesh
+        name        : Left Elbow
+        parent      : *l_elbow_yaw
+        file        : LElbowYaw.obj
+        mass        : 0.06483
+    
+      - &l_elbow_roll !revolute
+        name        : LElbowRoll
+        parent      : *l_elbow
+        offset      : [0, 0, 0]
+        axis        : [0, 0, 1]
+        minValue    : -88.5
+        maxValue    : -2
+    
+      - &l_forearm !mesh
+        name        : Left Forearm/Hand
+        parent      : *l_elbow_roll
+        offset      : [0, 0, 0]
+        file        : LElbowRollComplete.obj
+        translation : [0, 0, 0]
+        rotation    : [0, 0, 0]
+        mass        : 0.18405
+
+  - !chain &r_arm_chain
+    name  : Right Arm
+    parts :
+      - &r_shoulder_pitch !revolute
+        name        : RShoulderPitch
+        parent      : *torso
+        offset      : [0, -0.098, 0.1] 
+        axis        : [0, 1, 0] 
+        minValue    : -119.5
+        maxValue    : 119.5
+     
+      - &r_shoulder !mesh
+        name        : Right Shoulder
+        parent      : *r_shoulder_pitch
+        file        : RShoulderPitch.obj
+        mass        : 0.07
+     
+      - &r_shoulder_roll !revolute
+        name        : RShoulderRoll
+        parent      : *r_shoulder
+        offset      : [0, 0, 0]
+        axis        : [0, 0, 1]
+        minValue    : -76
+        maxValue    : 18
+     
+      - &r_bicep !mesh
+        name        : Right Bicep
+        parent      : *r_shoulder_roll
+        offset      : [0, 0, 0]
+        file        : RShoulderRoll.obj
+        translation : [0, 0, 0]
+        rotation    : [0, 0, 0]
+        mass        : 0.15794
+     
+      - &r_elbow_yaw !revolute
+        name        : RElbowYaw
+        parent      : *r_bicep
+        offset      : [0.105, -0.015, 0]
+        axis        : [1, 0, 0]
+        minValue    : -119.5
+        maxValue    : 119.5
+     
+      - &r_elbow !mesh
+        name        : Right Elbow
+        parent      : *r_elbow_yaw
+        file        : RElbowYaw.obj
+        mass        : 0.06483
+     
+      - &r_elbow_roll !revolute
+        name        : RElbowRoll
+        parent      : *r_elbow
+        offset      : [0, 0, 0]
+        axis        : [0, 0, 1]
+        minValue    : 2
+        maxValue    : 88.5
+     
+      - &r_forearm !mesh
+        name        : Right Forearm/Hand
+        parent      : *r_elbow_roll
+        offset      : [0, 0, 0]
+        file        : RElbowRollComplete.obj
+        translation : [0, 0, 0]
+        rotation    : [0, 0, 0]
+        mass        : 0.18405
+
+  - !chain &l_leg_chain
+    name  : Left Leg
+    parts : 
+      - &l_hip_yawpitch !revolute
+        name        : LHipYawPitch
+        parent      : *torso
+        offset      : [0, 0.05, -0.085]
+        axis        : [0, 0.7071, -0.7071] 
+        minValue    : -66.62
+        maxValue    : 42.44
+
+      - &l_pelvis !mesh
+        name        : Left Pelvis
+        parent      : *l_hip_yawpitch
+        file        : LHipYawPitch.obj
+        mass        : 0.06981
+
+      - &l_hip_roll !revolute
+        name        : LHipRoll
+        parent      : *l_pelvis
+        offset      : [0, 0, 0]
+        axis        : [1, 0, 0]
+        minValue    : -21.74
+        maxValue    : 45.29
+
+      - &l_hip !mesh
+        name        : Left Hip
+        parent      : *l_hip_roll
+        file        : LHipRoll.obj
+        mass        : 0.13053
+
+      - &l_hip_pitch !revolute
+        name        : LHipPitch
+        parent      : *l_hip
+        offset      : [0, 0, 0]
+        axis        : [0, 1, 0]
+        minValue    : -101.63
+        maxValue    : 27.73
+
+      - &l_thigh !mesh
+        name        : Left Thigh
+        parent      : *l_hip_pitch
+        offset      : [0, 0, 0]
+        file        : LHipPitch.obj
+        translation : [0, 0, 0]
+        rotation    : [0, 0, 0]
+        mass        : 0.38968
+
+      - &l_knee_pitch !revolute
+        name        : LKneePitch
+        parent      : *l_thigh
+        offset      : [0, 0, -0.1]
+        axis        : [0, 1, 0]
+        minValue    : -5.29
+        maxValue    : 121.04
+
+      - &l_tibia !mesh
+        name        : Left Tibia
+        parent      : *l_knee_pitch
+        offset      : [0, 0, 0]
+        file        : LKneePitch.obj
+        translation : [0, 0, 0]
+        rotation    : [0, 0, 0]
+        mass        : 0.29142
+
+      - &l_ankle_pitch !revolute
+        name        : LAnklePitch
+        parent      : *l_tibia
+        offset      : [0, 0, -0.1029]
+        axis        : [0, 1, 0]
+        minValue    : -68.15
+        maxValue    : 52.86
+
+      - &l_ankle !mesh
+        name        : Left Ankle
+        parent      : *l_ankle_pitch
+        file        : LAnklePitch.obj
+        mass        : 0.13416
+
+      - &l_ankle_roll !revolute
+        name        : LAnkleRoll
+        parent      : *l_ankle
+        offset      : [0, 0, 0]
+        axis        : [1, 0, 0]
+        minValue    : -22.79
+        maxValue    : 44.06
+
+      - &l_foot !mesh
+        name        : Left Foot
+        parent      : *l_ankle_roll
+        file        : LAnkleRoll.obj
+        mass        : 0.16184
+
+  - !chain &r_leg_chain
+    name  : Right Leg
+    parts :
+      - &r_hip_yawpitch !revolute
+        name        : RHipYawPitch
+        parent      : *torso
+        offset      : [0, -0.05, -0.085]
+        axis        : [0, 0.7071, 0.7071] 
+        minValue    : -65.62
+        maxValue    : 42.44
+    
+      - &r_pelvis !mesh
+        name        : Right Pelvis
+        parent      : *r_hip_yawpitch
+        file        : RHipYawPitch.obj
+        mass        : 0.07118
+    
+      - &r_hip_roll !revolute
+        name        : RHipRoll
+        parent      : *r_pelvis
+        offset      : [0, 0, 0]
+        axis        : [1, 0, 0]
+        minValue    : -42.30
+        maxValue    : 23.76
+    
+      - &r_hip !mesh
+        name        : Right Hip
+        parent      : *r_hip_roll
+        file        : RHipRoll.obj
+        mass        : 0.13053
+    
+      - &r_hip_pitch !revolute
+        name        : RHipPitch
+        parent      : *r_hip
+        offset      : [0, 0, 0]
+        axis        : [0, 1, 0]
+        minValue    : -101.54
+        maxValue    : 27.82
+    
+      - &r_thigh !mesh
+        name        : Right Thigh
+        parent      : *r_hip_pitch
+        file        : RHipPitch.obj
+        mass        : 0.38976
+    
+      - &r_knee_pitch !revolute
+        name        : RKneePitch
+        parent      : *r_thigh
+        offset      : [0, 0, -0.1]
+        axis        : [0, 1, 0]
+        minValue    : -5.9
+        maxValue    : 121.47
+    
+      - &r_tibia !mesh
+        name        : Right Tibia
+        parent      : *r_knee_pitch
+        file        : RKneePitch.obj
+        mass        : 0.29163
+    
+      - &r_ankle_pitch !revolute
+        name        : RAnklePitch
+        parent      : *r_tibia
+        offset      : [0, 0, -0.1029]
+        axis        : [0, 1, 0]
+        minValue    : -67.97
+        maxValue    : 53.4
+    
+      - &r_ankle !mesh
+        name        : Right Ankle
+        parent      : *r_ankle_pitch
+        file        : RAnklePitch.obj
+        mass        : 0.13415
+    
+      - &r_ankle_roll !revolute
+        name        : RAnkleRoll
+        parent      : *r_ankle
+        offset      : [0, 0, 0]
+        axis        : [1, 0, 0]
+        minValue    : -45.03
+        maxValue    : 22.27
+    
+      - &r_foot !mesh
+        name        : Right Foot
+        parent      : *r_ankle_roll
+        file        : RAnkleRoll.obj
+        mass        : 0.16171
+
+
+# =============================================================================
+# POSES
+# =============================================================================
+
+poses:
+  - name   : Init Pose
+    values : 
+      {
+        *head_yaw         :   0,
+        *head_pitch       :   0,
+        *l_shoulder_pitch :  80,
+        *l_shoulder_roll  :  20,
+        *l_elbow_yaw      : -80,
+        *l_elbow_roll     : -60,
+        *r_shoulder_pitch :  80,
+        *r_shoulder_roll  : -20,
+        *r_elbow_yaw      :  80,
+        *r_elbow_roll     :  60,
+        *l_hip_yawpitch   :   0,
+        *l_hip_roll       :   0,
+        *l_hip_pitch      : -20,
+        *l_knee_pitch     :  40,
+        *l_ankle_pitch    : -20,
+        *l_ankle_roll     :   0,
+        *r_hip_yawpitch   :   0,
+        *r_hip_roll       :   0,
+        *r_hip_pitch      : -20,
+        *r_knee_pitch     :  40,
+        *r_ankle_pitch    : -20,
+        *r_ankle_roll     :   0,
+      }
+
+  - name   : Zero Pose
+    values : 
+      {
+        *head_yaw         : 0,
+        *head_pitch       : 0,
+        *l_shoulder_pitch : 0,
+        *l_shoulder_roll  : 0,
+        *l_elbow_yaw      : 0,
+        *l_elbow_roll     : 0,
+        *r_shoulder_pitch : 0,
+        *r_shoulder_roll  : 0,
+        *r_elbow_yaw      : 0,
+        *r_elbow_roll     : 0,
+        *l_hip_yawpitch   : 0,
+        *l_hip_roll       : 0,
+        *l_hip_pitch      : 0,
+        *l_knee_pitch     : 0,
+        *l_ankle_pitch    : 0,
+        *l_ankle_roll     : 0,
+        *r_hip_yawpitch   : 0,
+        *r_hip_roll       : 0,
+        *r_hip_pitch      : 0,
+        *r_knee_pitch     : 0,
+        *r_ankle_pitch    : 0,
+        *r_ankle_roll     : 0,
+      }
+
+  - name   : Stand Pose
+    values : 
+      {
+        *head_yaw         :   0,
+        *head_pitch       : -10,
+        *l_shoulder_pitch :  90,
+        *l_shoulder_roll  :  10,
+        *l_elbow_yaw      : -70,
+        *l_elbow_roll     : -30,
+        *r_shoulder_pitch :  90,
+        *r_shoulder_roll  : -10,
+        *r_elbow_yaw      : 70,
+        *r_elbow_roll     : 30,
+        *l_hip_yawpitch   : -10,
+        *l_hip_roll       : 5,
+        *l_hip_pitch      : 10,
+        *l_knee_pitch     : -5,
+        *l_ankle_pitch    : 4,
+        *l_ankle_roll     : -5,
+        *r_hip_yawpitch   : -10,
+        *r_hip_roll       : -5,
+        *r_hip_pitch      : 10,
+        *r_knee_pitch     : -5,
+        *r_ankle_pitch    : 4,
+        *r_ankle_roll     : 5,
+      }
+
+# =============================================================================
+# MAPPING
+# =============================================================================
+
+# The full name of the Java class that performs the mapping from an OpenNI
+# skeleton to this model. This field is optional, but if it is blank or omitted
+# there will be no updates to the robot model when using the Kinect or skeleton
+# motion files.
+skelMapper: edu.miami.cs.krobot.mapping.NaoH21Mapper
+
+# This describes the format of model motion files and UDP packets sent by the
+# model messenger when using this robot model. For a single frame, each each
+# entry will be separated by a single space. Any entry you list here will have
+# its toString() method subtituted in its place if it is an object. If an entry
+# is a string, it will be used as the key in a hash map lookup of the public
+# properties for the model. This allows you to have the skeleton mapper insert
+# key/value pairs into the public properties and print their values out here.
+status: 
+  elements:
+    [
+      *head_chain,
+      *l_arm_chain,
+      *r_arm_chain,
+      *l_leg_chain,
+      *r_leg_chain
+    ]
+  radians: true
